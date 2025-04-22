@@ -1,6 +1,6 @@
 # fresh-stacks
 Fresh Stacks is an informal, self-directed group focused on learning new (to us) software technologies.
-This repo is for hosting code, documenting learnings, and managing shared infrastructure.
+This repo is for hosting code, documentation of learning, and shared infrastructure config.
 
 https://fresh-stacks.org
 
@@ -18,15 +18,15 @@ https://fresh-stacks.org
 
 ```
 % dig +noall +answer fresh-stacks.org
-fresh-stacks.org.	60	IN	A	34.36.137.74
+fresh-stacks.org.	60	IN	A	34.120.229.110
 ```
 
-The domain is registered with Cloudflare (DNS only--no proxy). The address `34.36.137.74` is a reserved (static) external IPv4 address in GCP. The SSL certificate is Google-managed. TLS termination is handled by an HTTP(S) Load Balancer created by Google based on our Kubernetes ingress manifest.
+The domain is registered with Cloudflare (DNS only--no proxy). The address `34.120.229.110` is a reserved (static) external IPv4 address in GCP. The SSL certificate is Google-managed. TLS termination is handled by an HTTP(S) Load Balancer created by Google based on our Kubernetes ingress manifest.
 
 ```
 % kubectl get ingress basic-ingress
-NAME            CLASS    HOSTS   ADDRESS        PORTS   AGE
-basic-ingress   <none>   *       34.36.137.74   80      2d21h
+NAME            CLASS    HOSTS   ADDRESS         PORTS   AGE
+basic-ingress   <none>   *       334.120.229.110 80      2d21h
 ```
 
 GCP docs describing this setup:
