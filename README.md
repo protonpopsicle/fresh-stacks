@@ -1,6 +1,6 @@
 # fresh-stacks
 Fresh Stacks is an informal, self-directed group focused on learning new (to us) software technologies.
-This repo is for hosting code, documentation of learning, and shared infrastructure config.
+This repo is for hosting code, documentation, and shared infrastructure config.
 
 https://fresh-stacks.org
 
@@ -9,9 +9,9 @@ https://fresh-stacks.org
 - gRPC
 - TypeScript
 - React
-- Pre-trained AI models
+- Gen AI
 - Google Cloud
-- MongoDB Atlas
+- MongoDB
 
 ## Configuration and Cloud
 `fresh-stacks.org` resolves to a public endpoint hosted on Google Cloud Platform (GCP).
@@ -36,15 +36,15 @@ GCP docs describing this setup:
 ### Costs
 
 The domain name costs $10.11/year.
-Google Kubernetes Engine (GKE) has a high maintanence cost ($75+/mo). Currently we are on GCP free trial which expires June 18, 2025. *Cloud-managed k8s is quite heavy for hosting our sample apps but we are using it in order to learn more about it*.
+Google Kubernetes Engine (GKE) has a high maintanence cost ($75+/mo). Currently we are on GCP free trial which expires June 18, 2025.
 
 ## Development Environments
 
 Each app has a README with environment setup instructions. The goal is to support the following options for local dev:
-1. Run apps natively
-2. Deploy apps using Docker (Docker Desktop)
-3. Deploy apps to local k8s (Minikube)
-4. Deploy apps to cloud (GKE)
+1. Run app locally (native)
+2. Deploy app using Docker (Docker Desktop)
+3. Deploy app to local k8s (Minikube)
+4. Deploy app to cloud (GKE)
 
 ### Docker Desktop
 
@@ -54,6 +54,6 @@ Docker Desktop is an easy way to install Docker Engine and other Docker software
 
 Minikube is a single-node k8s cluster useful for local developement.
 
-### Cloud aka Production
+### GKE
 
 Cloud is similar to #3 but with `kubectl` pointed to our GKE cluster. All apps run in the same cluster--it is a shared resource.

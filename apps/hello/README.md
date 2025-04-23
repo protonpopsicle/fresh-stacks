@@ -50,8 +50,3 @@ same steps as above but Docker steps slightly different. Example:
 % docker buildx build --platform linux/amd64 . -t us-central1-docker.pkg.dev/fresh-stacks/fresh-repo/hello:latest
 % docker push us-central1-docker.pkg.dev/fresh-stacks/fresh-repo/hello:latest
 ```
-
-To find public URL
-```
-% kubectl describe service hello
-```
