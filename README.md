@@ -41,20 +41,19 @@ Google Kubernetes Engine (GKE) has a high maintanence cost ($75+/mo). Currently 
 
 ## Development Environments
 
-Each app has a README with environment setup instructions. The goal is to support the following options for local dev:
-1. Run app locally (native)
-2. Deploy app using Docker (Docker Desktop)
-3. Deploy app to local k8s (Minikube)
-4. Deploy app to cloud (GKE)
+Each application under [/apps](apps) has a README with environment setup instructions. The goal is to support the following options for local dev:
+1. Run natively
+2. Run using Docker
+3. Deploy to local k8s
 
 ### Docker Desktop
 
-Docker Desktop is an easy way to install Docker Engine and other Docker software useful for local developement.
+[Docker Desktop](https://docs.docker.com/desktop/) is an easy way to install Docker Engine and other Docker software useful for local developement.
 
 ### Minikube
 
-Minikube is a single-node k8s cluster useful for local developement.
+[Minikube](https://minikube.sigs.k8s.io/) is a single-node k8s cluster useful for local developement.
 
-### GKE
+## Cloud Environment
 
-Cloud is similar to #3 but with `kubectl` pointed to our GKE cluster. All apps run in the same cluster--it is a shared resource.
+Applications get deployed to our fresh-stacks GKE cluster. All apps run in the same cluster--it is a shared resource.
