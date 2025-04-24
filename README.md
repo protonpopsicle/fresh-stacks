@@ -12,6 +12,7 @@ https://fresh-stacks.org
 - Gen AI
 - Google Cloud
 - MongoDB
+- Kafka
 
 ## Configuration and Cloud
 `fresh-stacks.org` resolves to a public endpoint hosted on Google Cloud Platform (GCP).
