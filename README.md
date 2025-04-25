@@ -17,14 +17,14 @@ https://fresh-stacks.org
 ## Configuration and Cloud
 `fresh-stacks.org` resolves to a public endpoint hosted on Google Cloud Platform (GCP).
 
-```
+```console
 % dig +noall +answer fresh-stacks.org
 fresh-stacks.org.	60	IN	A	34.120.229.110
 ```
 
 The domain is registered with Cloudflare (DNS only--no proxy). The address `34.120.229.110` is a reserved (static) external IPv4 address in GCP. The SSL certificate is Google-managed. TLS termination is handled by an HTTP(S) Load Balancer created by Google based on our Kubernetes ingress manifest.
 
-```
+```console
 % kubectl get ingress basic-ingress
 NAME            CLASS    HOSTS   ADDRESS         PORTS   AGE
 basic-ingress   <none>   *       334.120.229.110 80      2d21h
@@ -61,14 +61,19 @@ For cloud hosting we operate a shared GKE cluster `fresh-cluster-1`.
 Install the [GCloud CLI](https://cloud.google.com/sdk/docs/install). Contact @protonpopsicle to get access to the necessary roles for the `fresh-stacks` GCP project.
 
 ```
+% gcloud components install gke-gcloud-auth-plugin
 % gcloud container clusters get-credentials fresh-cluster-1 --region=us-central1
 % gcloud auth configure-docker us-central1-docker.pkg.dev
 ```
 
-May need to switch kubectl contexts between Minikube and fresh-cluster-1:
-
-```
-% kubectl config use-context minikube
-...
+To switch kubectl contexts between Minikube and fresh-cluster-1:
+```console
 % kubectl config use-context gke_fresh-stacks_us-central1_fresh-cluster-1
+% kubectl config get-contexts                                            
+CURRENT   NAME                                           CLUSTER                                        AUTHINFO                                       NAMESPACE
+*         gke_fresh-stacks_us-central1_fresh-cluster-1   gke_fresh-stacks_us-central1_fresh-cluster-1   gke_fresh-stacks_us-central1_fresh-cluster-1             
+          minikube                                       minikube                                       minikube                                       default
 ```
+
+Relevent docs: 
+https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl
