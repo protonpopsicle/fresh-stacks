@@ -69,11 +69,11 @@ Install the [GCloud CLI](https://cloud.google.com/sdk/docs/install). Contact @pr
 
 To switch kubectl contexts between Minikube and fresh-cluster-1:
 ```console
-% kubectl config use-context NAME
 % kubectl config get-contexts                                            
 CURRENT   NAME                                           CLUSTER                                        AUTHINFO                                       NAMESPACE
-*         gke_fresh-stacks_us-central1_fresh-cluster-1   gke_fresh-stacks_us-central1_fresh-cluster-1   gke_fresh-stacks_us-central1_fresh-cluster-1             
-          minikube                                       minikube                                       minikube                                       default
+          gke_fresh-stacks_us-central1_fresh-cluster-1   gke_fresh-stacks_us-central1_fresh-cluster-1   gke_fresh-stacks_us-central1_fresh-cluster-1             
+*         minikube                                       minikube                                       minikube                                       default
+% kubectl config use-context NAME
 ```
 
 Relevent docs: 
