@@ -47,7 +47,7 @@ Visit [http://localhost:3000](http://localhost:3000).
 http://127.0.0.162900
 ```
 
-Visit `http://127.0.0.1:62900` (actual URL obtained from above command). Note: [yq](https://github.com/mikefarah/yq) is used above to substitute the `image` value in the deployment manifest to point to our local image.
+Visit `http://127.0.0.1:62900` (actual URL obtained from above command). Note: [yq](https://github.com/mikefarah/yq) is used above to substitute the `image` value in the deployment manifest to point to your local image.
 
 ## Deploy on GKE
 ```console
