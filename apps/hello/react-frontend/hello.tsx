@@ -2,14 +2,14 @@ import React from "react";
 
 function Profile() {
     return (
-        <img src="https://i.imgur.com/MK3eW3As.jpg" alt="Katherine Johnson"/>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/330px-React-icon.svg.png" alt="React"/>
     );
 }
 
 export default function Gallery() {
     return (
         <section>
-            <h1>Amazing scientists</h1>
+            <h1>Fresh Stacks</h1>
             <Profile />
             <Profile />
             <Profile />
