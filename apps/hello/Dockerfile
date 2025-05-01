@@ -16,5 +16,8 @@ COPY . .
 # Expose port (change this to match your application's port)
 EXPOSE 3000
 
-# Define the command to run the app
-CMD ["node", "app.js"]
+# Build the application: Run the build command defined in your package.json scripts (e.g., npm run build).
+RUN npm run build:backend && npm run build:frontend
+
+# Define the command to run: Specify the command to start your application.
+CMD ["npm", "start"]
