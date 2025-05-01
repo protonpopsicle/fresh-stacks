@@ -23,7 +23,7 @@ Populate the values in the .env file so code can access necessary environment va
 
 ## Run locally
 ```console
-% % npm start
+% npm start
 
 > hello@1.0.0 start
 > node build/app.js
