@@ -22,9 +22,10 @@ https://fresh-stacks.org
 fresh-stacks.org.	60	IN	A	34.120.229.110
 ```
 
-The domain is registered with Cloudflare (DNS only--no proxy). The address `34.120.229.110` is a reserved (static) external IPv4 address in GCP. The SSL certificate is Google-managed. TLS termination is handled by an HTTP(S) Load Balancer created by Google based on our Kubernetes ingress manifest.
+The domain is registered with Cloudflare (DNS only--no proxy). The address `34.120.229.110` is a reserved (static) external IPv4 address in GCP. The SSL certificate is Google-managed. TLS termination is handled by an HTTP(S) Load Balancer created by Google based on our Kubernetes [ingress manifest](kubernetes/basic-ingress.yaml).
 
 ```console
+$ kubectl config use-context gke_fresh-stacks_us-central1_fresh-cluster-1
 % kubectl get ingress basic-ingress
 NAME            CLASS    HOSTS   ADDRESS         PORTS   AGE
 basic-ingress   <none>   *       334.120.229.110 80      2d21h
@@ -58,7 +59,7 @@ For cloud hosting we operate a shared GKE cluster `fresh-cluster-1`.
 
 ### Google Cloud
 
-Install the [GCloud CLI](https://cloud.google.com/sdk/docs/install). Contact @protonpopsicle to get access to the necessary roles for the `fresh-stacks` GCP project.
+Install the [GCloud CLI](https://cloud.google.com/sdk/docs/install). Contact @protonpopsicle to request access for the `fresh-stacks` GCP project.
 
 ```
 % gcloud components install gke-gcloud-auth-plugin
@@ -68,12 +69,27 @@ Install the [GCloud CLI](https://cloud.google.com/sdk/docs/install). Contact @pr
 
 To switch kubectl contexts between Minikube and fresh-cluster-1:
 ```console
-% kubectl config use-context gke_fresh-stacks_us-central1_fresh-cluster-1
 % kubectl config get-contexts                                            
 CURRENT   NAME                                           CLUSTER                                        AUTHINFO                                       NAMESPACE
-*         gke_fresh-stacks_us-central1_fresh-cluster-1   gke_fresh-stacks_us-central1_fresh-cluster-1   gke_fresh-stacks_us-central1_fresh-cluster-1             
-          minikube                                       minikube                                       minikube                                       default
+          gke_fresh-stacks_us-central1_fresh-cluster-1   gke_fresh-stacks_us-central1_fresh-cluster-1   gke_fresh-stacks_us-central1_fresh-cluster-1             
+*         minikube                                       minikube                                       minikube                                       default
+% kubectl config use-context NAME
 ```
 
 Relevent docs: 
 https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl
+
+For example of detailed steps see [apps/hello/README.md](apps/hello/README.md).
+
+### Kubernetes Configuration
+
+Some manifest files are app-specific. These reside in the app's directory and are symlinked into the root [kubernetes](kubernetes) folder for convenience.
+
+```console
+% ls -go kubernetes
+total 16
+-rw-r--r--  1   366 Apr 21 14:52 basic-ingress.yaml
+lrwxr-xr-x  1    35 Apr 24 18:27 hello-deployment.yaml -> ../apps/hello/hello-deployment.yaml
+lrwxr-xr-x  1    32 Apr 24 18:27 hello-service.yaml -> ../apps/hello/hello-service.yaml
+-rw-r--r--  1   128 Apr 21 12:38 managed-cert.yaml
+```
