@@ -1,5 +1,5 @@
 # hello
-Node static files server. Serves landing page for [fresh-stacks.org](https://fresh-stacks.org/).
+Node static files server + simple React app. Serves landing page for [fresh-stacks.org](https://fresh-stacks.org/).
 
 ## Install Dependencies
 
@@ -16,9 +16,19 @@ Node static files server. Serves landing page for [fresh-stacks.org](https://fre
 
 Populate the values in the .env file so code can access necessary environment vars at run time.
 
+## Build the frontend and backend
+```console
+% npm run build:backend && npm run build:frontend
+```
+
 ## Run locally
 ```console
-% node app.js
+% % npm start
+
+> hello@1.0.0 start
+> node build/app.js
+
+serving files from:  /path/to/fresh-stacks/apps/hello/build
 Server listening on port 3000
 Pinged your deployment. You successfully connected to MongoDB!
 ```
