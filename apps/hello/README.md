@@ -50,7 +50,7 @@ Visit [http://localhost:3000](http://localhost:3000).
 % docker build -t $USER/hello .
 ...
 % kubectl create configmap hello-config --from-env-file=.env
-% IMAGE=docker.io/$USER/hello:latest yq eval '.spec.template.spec.containers[].image = env(IMAGE)' hello-deployment.yaml | kubectl apply -f - -f hello-service.yaml
+% IMAGE=docker.io/$USER/hello:latest yq eval '.spec.template.spec.containers[].image = env(IMAGE), .spec.template.spec.containers[].imagePullPolicy = "Never"' hello-deployment.yaml | kubectl apply -f - -f hello-service.yaml
 % kubectl rollout restart deployment/hello
 % minikube service hello-service --url
 http://127.0.0.1:62900
