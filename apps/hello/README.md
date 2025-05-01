@@ -41,13 +41,15 @@ Pinged your deployment. You successfully connected to MongoDB!
 
 ## Deploy to local k8s
 ```console
+% minikube start
 % eval $(minikube -p minikube docker-env)
 % docker build . -t $USER/hello
 ...
-% kubectl config use-context minikube
 % kubectl create configmap hello-config --from-env-file=.env
-% kubectl apply -f hello-deployment.yaml
+% IMAGE=docker.io/$USER/hello:latest yq eval '.spec.template.spec.containers[].image = env(IMAGE)' hello-deployment.yaml | kubectl apply -f - -f hello-service.yaml
 % kubectl rollout restart deployment/hello
+% minikube service hello-service --url
+http://127.0.0.1:62900
 ```
 
 ## Deploy on GKE
@@ -57,6 +59,6 @@ Pinged your deployment. You successfully connected to MongoDB!
 ...
 % kubectl config use-context gke_fresh-stacks_us-central1_fresh-cluster-1 
 % kubectl create configmap hello-config --from-env-file=.env
-% kubectl apply -f hello-deployment.yaml
+% kubectl apply -f hello-deployment.yaml -f hello-service.yaml
 % kubectl rollout restart deployment/hello
 ```
