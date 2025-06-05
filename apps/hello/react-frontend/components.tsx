@@ -7,70 +7,90 @@ interface DropdownItem {
 
 interface DropdownProps {
     options: DropdownItem[],
+    label: string,
+    selected: string,
     onChange: (arg1: string) => void
 }
 
-function Dropdown({options, onChange}: DropdownProps) {
-    const [selected, setSelected] = useState("");
-
+function Dropdown({options, label, selected, onChange}: DropdownProps) {
     const optionList = options.map((option, index) => (
         <option key={index} value={option.value}>{option.desc}</option>
     ));
 
     function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
-        setSelected(event.target.value);
         onChange(event.target.value);
     };
 
     return (
         <select value={selected} onChange={handleSelectChange}>
-            <option value="">Select an option</option>
+            <option disabled value="">{label}</option>
             { optionList }
         </select>
     );
 }
 
-function Logo() {
-    return (
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/330px-React-icon.svg.png" alt="React"/>
-    );
-}
-
-function Card() {
-    return (
-        <div className="mx-auto flex max-w-sm items-center gap-x-4 rounded-xl bg-white p-6 shadow-lg outline outline-black/5 dark:bg-slate-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
-            <img className="size-12 shrink-0" src="/img/logo.svg" alt="ChitChat Logo" />
-            <div>
-                <div className="text-xl font-medium text-black dark:text-white">ChitChat</div>
-                <p className="text-gray-500 dark:text-gray-400">You have a new message!</p>
-            </div>
-        </div>
-    );
-}
-
-interface SearchProps {
+interface LogoProps {
     color: string;
     saturation: number;
 }
 
-function Search({color, saturation}: SearchProps) {
+function Logo({color, saturation}: LogoProps) {
+    const style = {"--inkColor": color, "opacity": saturation / 100 } as React.CSSProperties;
     return (
-        <div className='max-w-md mx-auto'>
-            <div className="relative flex items-center w-full h-12 rounded-lg focus-within:shadow-lg bg-white overflow-hidden">
-            <div className="grid place-items-center h-full w-12 text-gray-300">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-            </div>
-
-            <input
-                className="peer h-full w-full outline-none text-sm text-gray-700 pr-2"
-                type="text"
-                id="search"
-                placeholder={`Search something.. ${color}/${saturation}`} /> 
+        <div className="stamp logo-container" style={style}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.5 -10.23174 23 20.46348"
+            width="90" height="90">
+                <title>React Logo</title>
+                <circle cx="0" cy="0" r="2.05" fill="currentColor"/>
+                <g stroke="currentColor" stroke-width="1" fill="none">
+                    <ellipse rx="11" ry="4.2"/>
+                    <ellipse rx="11" ry="4.2" transform="rotate(60)"/>
+                    <ellipse rx="11" ry="4.2" transform="rotate(120)"/>
+                </g>
+            </svg>
         </div>
-    </div>
     );
 }
 
-export { Card, Dropdown, DropdownItem, Search }
+interface StampProps {
+    color: string;
+    saturation: number;
+}
+
+function Card({color, saturation}: StampProps) {
+    const style = {"--inkColor": color, "opacity": saturation / 100 } as React.CSSProperties;
+    return (
+        <div className="stamp card-container" style={style}>
+            <div className="card-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+            </div>
+            <div className="card-content">
+                <div className="card-title">ChitChat</div>
+                <p className="card-message">You have a new message!</p>
+            </div>
+        </div>
+    );
+}
+
+function Search({color, saturation}: StampProps) {
+    const style = {"--inkColor": color, "opacity": saturation / 100 } as React.CSSProperties;
+    return (
+        <div className="stamp search-container" style={style}>
+            <div className="search-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.3-4.3"/>
+                </svg>
+            </div>
+            <input
+                type="text"
+                className="search-input"
+                placeholder="Search"
+            />
+        </div>
+    );
+}
+
+export { Card, Dropdown, DropdownItem, Search, Logo }

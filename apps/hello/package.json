@@ -27,20 +27,17 @@
     "start": "node build/app.js",
     "lint:backend": "tsc --noEmit --p node-backend",
     "lint:frontend": "tsc --noEmit --p react-frontend",
-    "build:css": "npx @tailwindcss/cli -i react-frontend/main.css -o build/output.css",
     "build:backend": "npm run lint:backend && esbuild node-backend/app.ts --bundle --packages=external --outdir=build --platform=node --format=esm --tree-shaking=true --analyze",
-    "build:frontend": "npm run lint:frontend && esbuild react-frontend/index.tsx --bundle --outdir=build --sourcemap --analyze && cp react-frontend/public/* build/ && npm run build:css"
+    "build:frontend": "npm run lint:frontend && esbuild react-frontend/index.tsx --bundle --outdir=build --sourcemap --analyze && cp react-frontend/public/* build/"
   },
   "dependencies": {
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "mongodb": "^6.16.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "tailwindcss": "^4.1.5"
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "@tailwindcss/cli": "^4.1.5",
     "@types/express": "^5.0.1",
     "@types/node": "^22.15.3",
     "@types/react": "^19.1.2",
