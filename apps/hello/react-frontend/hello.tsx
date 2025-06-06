@@ -52,8 +52,8 @@ export default function Interface() {
         const newStamps = [...stamps, {color: inkColor, saturation: inkSaturation, componentName: componentName}];
         setStamps(newStamps);
         setHistory([...history, [...newStamps]]);
-        if (inkSaturation > 10) {
-            setInkSaturation(inkSaturation - 10);
+        if (inkSaturation > 16) {
+            setInkSaturation(inkSaturation - 14);
         }
     };
 

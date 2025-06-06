@@ -25,6 +25,11 @@ ul {
     margin-top: 40px;
 }
 
+#stampList li {
+    margin: 7px 0;
+    padding: 0 15px;
+}
+
 .stamp {
     color: var(--inkColor);
 }
@@ -32,11 +37,15 @@ ul {
 .search-container {
     display: flex;
     align-items: center;
-    background: transparent;
-    border-radius: 20px;
-    padding: 8px 16px;
+    background: #00000005;
+    border-radius: 16px;
+    padding: 7px 13px;
     width: 240px;
-    border: 2px solid currentcolor;
+    border: 1px solid currentColor;
+}
+
+.search-container:focus-within {
+    outline: 2px solid currentColor;
 }
 
 .search-icon {
@@ -50,7 +59,7 @@ ul {
     background: transparent;
     outline: none;
     width: 100%;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .search-input::placeholder {
@@ -61,11 +70,12 @@ ul {
 .card-container {
     display: flex;
     align-items: center;
-    background: transparent;
-    border-radius: 20px;
+    background: color-mix(in srgb, var(--inkColor) 88%, transparent);
+    border-radius: 0 17px 17px 17px;
     padding: 8px 16px;
     width: 240px;
-    border: 2px solid currentcolor;
+    border: 1px solid var(--inkColor);
+    color: white;
 }
 
 .card-icon {
