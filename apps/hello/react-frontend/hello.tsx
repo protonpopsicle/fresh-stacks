@@ -7,7 +7,9 @@ const colorList: Array<DropdownItem> = [
     {value: "blue", desc: "Blue" },
     {value: "violet", desc: "Violet"},
     {value: "red", desc: "Red"},
-    {value: "green", desc: "Green"}
+    {value: "green", desc: "Green"},
+    {value: "#A47864", desc: "Mocha Mousse"},
+    {value: "#E3BD33", desc: "Misted Marigold"}
 ]
 
 const componentList: Array<DropdownItem> = [
@@ -26,16 +28,16 @@ function historyList(history: Array<StampState[]>): Array<DropdownItem> {
     let opts: Array<DropdownItem> = [];
     for (const i in history) {
         let lastStamp = history[i].at(-1);
-        opts.push({"value": i, "desc": `${i}: ${lastStamp?.color} ${lastStamp?.componentName}`});
+        opts.push({"value": i, "desc": `${i}: ${lastStamp?.color || ''} ${lastStamp?.componentName || ''}`});
     }
     return opts;
 }
 
 export default function Interface() {
     const [stamps, setStamps] = useState<StampState[]>([]);
-    const [history, setHistory] = useState<StampState[][]>([]);
-    const [componentName, setComponentName] = useState("");
-    const [inkColor, setInkColor] = useState("");
+    const [history, setHistory] = useState<StampState[][]>([[]]);
+    const [componentName, setComponentName] = useState(componentList[0]['value']);
+    const [inkColor, setInkColor] = useState(colorList[0]['value']);
     const [inkSaturation, setInkSaturation] = useState(100);
 
     function handleColorChange(colorValue: string) {
@@ -59,14 +61,20 @@ export default function Interface() {
 
     function handleHistoryChange(value: string) {
         const index = Number(value);
-        const stamps = history[index];
-        const lastStamp = stamps.at(-1);
-
-        if (lastStamp !== undefined) {
+        if (index > 0) {
+            const stamps = history[index];
+            const lastStamp = stamps.at(-1);
             setStamps(stamps);
-            setInkSaturation(lastStamp.saturation);
-            setInkColor(lastStamp.color);
-            setComponentName(lastStamp.componentName);
+            if (lastStamp !== undefined) {
+                setInkSaturation(lastStamp.saturation);
+                setInkColor(lastStamp.color);
+                setComponentName(lastStamp.componentName);
+            }
+        } else { // reset to initial state
+                setStamps([]);
+                setInkSaturation(100);
+                setInkColor(colorList[0]['value']);
+                setComponentName(componentList[0]['value']);
         }
     };
 
