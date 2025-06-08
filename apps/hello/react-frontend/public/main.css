@@ -1,9 +1,26 @@
 :root {
     --inkColor: #000;
+    --sidebarWidth: 280px;
+    --bgColor: #fff;
+    --textColor: #000;
+    --borderColor: #eee;
+    --hoverBgColor: #f5f5f5;
+}
+
+[data-theme="dark"] {
+    --inkColor: #fff;
+    --bgColor: #1a1a1a;
+    --textColor: #fff;
+    --borderColor: #333;
+    --hoverBgColor: #2a2a2a;
 }
 
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bgColor);
+    color: var(--textColor);
 }
 
 ul {
@@ -15,19 +32,42 @@ ul {
 #topRow {
     position: fixed;
     top: 0;
-    background: white;
-    z-index: 9000;
     left: 0;
-    padding: 8px;
+    bottom: 0;
+    width: var(--sidebarWidth);
+    background: var(--bgColor);
+    z-index: 9000;
+    padding: 16px;
+    border-right: 1px solid var(--borderColor);
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 
 #stampList {
-    margin-top: 40px;
+    margin-left: var(--sidebarWidth);
+    padding: 16px;
+    min-height: 100vh;
+    box-sizing: border-box;
 }
 
 #stampList li {
     margin: 7px 0;
     padding: 0 15px;
+}
+
+@media (max-width: 768px) {
+    #topRow {
+        position: relative;
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #eee;
+        padding: 12px;
+    }
+
+    #stampList {
+        margin-left: 0;
+        padding: 12px;
+    }
 }
 
 .stamp {
@@ -36,12 +76,67 @@ ul {
 
 .search-container {
     display: flex;
-    align-items: center;
-    background: #00000005;
+    align-items: flex-start;
+    background: color-mix(in srgb, var(--textColor) 5%, transparent);
     border-radius: 16px;
     padding: 7px 13px;
     width: 240px;
-    border: 1px solid currentColor;
+    outline: 1px solid currentColor;
+    position: relative;
+}
+
+.search-input-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-results {
+    position: relative;
+    background: white;
+    margin-top: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    border-top: 1px solid var(--inkColor);
+}
+
+.search-result-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item:hover,
+.search-result-item.focused {
+    background: var(--hoverBgColor);
+}
+
+.search-result-item.focused {
+    outline: 2px solid var(--inkColor);
+    outline-offset: -2px;
+}
+
+.result-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--inkColor);
+}
+
+.result-category {
+    font-size: 12px;
+    color: #666;
+    margin-top: 2px;
+}
+
+.search-result-item.no-results {
+    color: #666;
+    font-style: italic;
+    cursor: default;
 }
 
 .search-container:focus-within {
@@ -60,6 +155,7 @@ ul {
     outline: none;
     width: 100%;
     font-size: 16px;
+    color: var(--inkColor);
 }
 
 .search-input::placeholder {
@@ -107,4 +203,180 @@ ul {
     justify-content: center;
     padding: 0px 16px;
     width: 240px;
+}
+
+.color-picker {
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+}
+
+.color-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.2s ease;
+}
+
+.color-circle:hover {
+    transform: scale(1.1);
+}
+
+.color-circle.selected {
+    border-color: #666;
+    transform: scale(1.1);
+}
+
+.theme-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--textColor);
+    transition: background-color 0.2s;
+}
+
+.theme-toggle:hover {
+    background: var(--hoverBgColor);
+}
+
+.theme-toggle svg {
+    width: 24px;
+    height: 24px;
+}
+
+.button-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.button {
+    padding: 8px 16px;
+    border: 1px solid var(--borderColor);
+    border-radius: 8px;
+    background: var(--bgColor);
+    color: var(--textColor);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.button:hover {
+    background: var(--hoverBgColor);
+}
+
+.button.primary {
+    border-color: var(--textColor);
+}
+
+.button.danger {
+    color: #dc2626;
+    border-color: #dc2626;
+}
+
+.button.danger:hover {
+    background: #dc2626;
+    color: white;
+}
+
+.button.icon {
+    padding: 4px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+}
+
+.button.icon:hover {
+    background: var(--hoverBgColor);
+}
+
+.button-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.stamp-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 7px 0;
+    padding: 0 15px;
+    position: relative;
+}
+
+.delete-button {
+    position: absolute;
+    right: 15px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.stamp-item:hover .delete-button {
+    opacity: 1;
+}
+
+.progress-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+}
+
+.progress-container.vertical .progress-bar {
+    width: 24px;
+    height: 80px;
+}
+
+.progress-container.horizontal .progress-bar {
+    width: 120px;
+    height: 24px;
+}
+
+.progress-bar {
+    background: color-mix(in srgb, var(--inkColor) 10%, transparent);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--inkColor);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    height: 100%;
+    width: 100%;
+}
+
+.saturation-display {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    background: var(--bgSecondary);
+    border-radius: 8px;
+}
+
+.saturation-label {
+    font-size: 14px;
+    color: var(--textSecondary);
 }
