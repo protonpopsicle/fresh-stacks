@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Card, Logo, Dropdown, DropdownItem, Search, ColorPicker, ThemeToggle, Button, DeleteButton, StampableButton, ProgressBar } from "./components";
+import { Card, Logo, Dropdown, DropdownItem, Search, ColorPicker, ThemeToggle, Button, ProgressBar, Popup } from "./components";
 
 const colorList = [
-    "#4a4a4a",  // medium gray instead of black
-    "#3b82f6",  // medium blue instead of dark blue
+    "#4a4a4a",
+    "#3b82f6",
     "violet",
     "red",
     "green",
@@ -13,10 +13,11 @@ const colorList = [
 
 const componentList: Array<DropdownItem> = [
     {value: "search", desc: "Search Bar"},
-    {value: "card", desc: "Message Card" },
-    {value: "button", desc: "Button" },
+    {value: "card", desc: "Message Card"},
+    {value: "button", desc: "Button"},
     {value: "progress", desc: "Progress Bar"},
-    {value: "logo", desc: "React Logo" },
+    {value: "logo", desc: "React Logo"},
+    {value: "popup", desc: "Popup Window"},
 ]
 
 interface StampState {
@@ -116,17 +117,27 @@ export default function Interface() {
         }
     };
 
-    function renderStamp(stampState: StampState) {
+    function renderStamp(index: number, stampState: StampState) {
+        const style = {"--inkColor": stampState.color, "opacity": stampState.saturation / 100 };
         if (stampState.componentName === "search") {
-            return <Search color={stampState.color} saturation={stampState.saturation} />
+            return <Search style={style} />
         } else if (stampState.componentName === "card") {
-            return <Card color={stampState.color} saturation={stampState.saturation} />
+            return <Card style={style} />
         } else if (stampState.componentName === "logo") {
-            return <Logo color={stampState.color} saturation={stampState.saturation} />
+            return <Logo style={style} />
         } else if (stampState.componentName === "button") {
-            return <StampableButton color={stampState.color} saturation={stampState.saturation} />
+            return <Button style={style}>Click Me</Button>
         } else if (stampState.componentName === "progress") {
-            return <ProgressBar color={stampState.color} saturation={stampState.saturation} />
+            return <ProgressBar style={style} />
+        } else if (stampState.componentName === "popup") {
+            return <Popup 
+                message="I am a rogue AI"
+                style={style}
+                onClose={() => {
+                    const newStamps = stamps.filter((_, i) => i !== index);
+                    setStamps(newStamps);
+                }}
+            />
         }
     };
 
@@ -135,6 +146,8 @@ export default function Interface() {
         setInkSaturation(100);
         setHistory([]);
     };
+
+    const inkSaturationBarStyle = {"--inkColor": inkColor, "opacity": 100 };
 
     return (
         <div>
@@ -162,8 +175,7 @@ export default function Interface() {
                 />
                 <div className="saturation-display">
                     <ProgressBar 
-                        color={inkColor} 
-                        saturation={100} 
+                        style={inkSaturationBarStyle} 
                         progress={inkSaturation}
                         orientation="vertical"
                     />
@@ -173,13 +185,7 @@ export default function Interface() {
             <ul id="stampList">
                 { stamps.map((stampState: StampState, index) => 
                 <li key={index} className="stamp-item">
-                    {renderStamp(stampState)}
-                    <DeleteButton 
-                        onClick={() => {
-                            const newStamps = stamps.filter((_, i) => i !== index);
-                            setStamps(newStamps);
-                        }}
-                    />
+                    {renderStamp(index, stampState)}
                 </li>
                 )}
             </ul>
