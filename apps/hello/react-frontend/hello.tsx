@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Card, Logo, Dropdown, DropdownItem, Search, ColorPicker, ThemeToggle, Button, DeleteButton, StampableButton, ProgressBar } from "./components";
+import { Card, Logo, Dropdown, DropdownItem, Search, ColorPicker, ThemeToggle, Button, ProgressBar, PopupContent } from "./components";
 
 const colorList = [
-    "#4a4a4a",  // medium gray instead of black
-    "#3b82f6",  // medium blue instead of dark blue
+    "#4a4a4a",
+    "#3b82f6",
     "violet",
     "red",
     "green",
@@ -13,10 +13,12 @@ const colorList = [
 
 const componentList: Array<DropdownItem> = [
     {value: "search", desc: "Search Bar"},
-    {value: "card", desc: "Message Card" },
-    {value: "button", desc: "Button" },
-    {value: "progress", desc: "Progress Bar"},
-    {value: "logo", desc: "React Logo" },
+    {value: "card", desc: "Message Card"},
+    {value: "button", desc: "Button"},
+    {value: "progress-h", desc: "Progress Bar H"},
+    {value: "progress-v", desc: "Progress Bar V"},
+    {value: "logo", desc: "React Logo"},
+    {value: "popup", desc: "Popup Window"},
 ]
 
 interface StampState {
@@ -116,17 +118,34 @@ export default function Interface() {
         }
     };
 
-    function renderStamp(stampState: StampState) {
+    function renderStamp(index: number, stampState: StampState) {
+        const style = {"--inkColor": stampState.color, "opacity": stampState.saturation / 100 };
         if (stampState.componentName === "search") {
-            return <Search color={stampState.color} saturation={stampState.saturation} />
+            return <Search style={style} />
         } else if (stampState.componentName === "card") {
-            return <Card color={stampState.color} saturation={stampState.saturation} />
+            return <Card style={style} />
         } else if (stampState.componentName === "logo") {
-            return <Logo color={stampState.color} saturation={stampState.saturation} />
+            return <Logo style={style} />
         } else if (stampState.componentName === "button") {
-            return <StampableButton color={stampState.color} saturation={stampState.saturation} />
-        } else if (stampState.componentName === "progress") {
-            return <ProgressBar color={stampState.color} saturation={stampState.saturation} />
+            return <Button 
+                style={style}
+                onClick={() => {
+                    alert("I am a rogue AI");
+                }}
+                >Click Me</Button>
+        } else if (stampState.componentName === "progress-h") {
+            return <ProgressBar orientation="horizontal" style={style} />
+        } else if (stampState.componentName === "progress-v") {
+                return <ProgressBar orientation="vertical" style={style} />
+        } else if (stampState.componentName === "popup") {
+            return <PopupContent 
+                message="I am a rogue AI"
+                style={style}
+                onClose={() => {
+                    const newStamps = stamps.filter((_, i) => i !== index);
+                    setStamps(newStamps);
+                }}
+            />
         }
     };
 
@@ -136,10 +155,36 @@ export default function Interface() {
         setHistory([]);
     };
 
+    const inkSaturationBarStyle = {"--inkColor": inkColor, "opacity": 100 };
+
     return (
         <div>
-            <ThemeToggle theme={theme} onToggle={toggleTheme} />
-            <div id="topRow">
+            <div id="shroud"></div>
+            <div className="hud right">
+                <ThemeToggle theme={theme} onToggle={toggleTheme} />
+                <ProgressBar
+                    style={inkSaturationBarStyle} 
+                    progress={inkSaturation}
+                    orientation="vertical"
+                />
+            </div>
+            <div className="hud left">
+                <div className="button-group">
+                    <ColorPicker 
+                        colors={colorList}
+                        selectedColor={inkColor}
+                        onColorSelect={handleColorChange}
+                    />
+                </div>
+                <div className="button-group">
+                    <Dropdown options={componentList} label="Stamp Design" selected={componentName} onChange={handleComponentChange} />
+                    <Dropdown
+                        options={historyList(history)}
+                        label="History"
+                        selected=""
+                        onChange={handleHistoryChange}
+                    />
+                </div>
                 <div className="button-group">
                     <Button onClick={handleClick}>
                         Add Stamp
@@ -148,38 +193,11 @@ export default function Interface() {
                         Clear All
                     </Button>
                 </div>
-                <ColorPicker 
-                    colors={colorList}
-                    selectedColor={inkColor}
-                    onColorSelect={handleColorChange}
-                />
-                <Dropdown options={componentList} label="Stamp Design" selected={componentName} onChange={handleComponentChange} />
-                <Dropdown
-                    options={historyList(history)}
-                    label="History"
-                    selected=""
-                    onChange={handleHistoryChange}
-                />
-                <div className="saturation-display">
-                    <ProgressBar 
-                        color={inkColor} 
-                        saturation={100} 
-                        progress={inkSaturation}
-                        orientation="vertical"
-                    />
-                    <span className="saturation-label">Ink Saturation</span>
-                </div>
             </div>
             <ul id="stampList">
                 { stamps.map((stampState: StampState, index) => 
                 <li key={index} className="stamp-item">
-                    {renderStamp(stampState)}
-                    <DeleteButton 
-                        onClick={() => {
-                            const newStamps = stamps.filter((_, i) => i !== index);
-                            setStamps(newStamps);
-                        }}
-                    />
+                    {renderStamp(index, stampState)}
                 </li>
                 )}
             </ul>

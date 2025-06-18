@@ -30,19 +30,17 @@ function Dropdown({options, label, selected, onChange}: DropdownProps) {
 }
 
 interface LogoProps {
-    color: string;
-    saturation: number;
+    style?: React.CSSProperties
 }
 
-function Logo({color, saturation}: LogoProps) {
-    const style = {"--inkColor": color, "opacity": saturation / 100 } as React.CSSProperties;
+function Logo({style}: LogoProps) {
     return (
-        <div className="stamp logo-container" style={style}>
+        <div className="logo-container" style={style}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.5 -10.23174 23 20.46348"
             width="80" height="80">
                 <title>React Logo</title>
                 <circle cx="0" cy="0" r="2.05" fill="currentColor"/>
-                <g stroke="currentColor" stroke-width="1" fill="none">
+                <g stroke="currentColor" strokeWidth="1" fill="none">
                     <ellipse rx="11" ry="4.2"/>
                     <ellipse rx="11" ry="4.2" transform="rotate(60)"/>
                     <ellipse rx="11" ry="4.2" transform="rotate(120)"/>
@@ -52,23 +50,23 @@ function Logo({color, saturation}: LogoProps) {
     );
 }
 
-interface StampProps {
-    color: string;
-    saturation: number;
+interface CardProps {
+    style?: React.CSSProperties,
+    title?: string,
+    message?: string
 }
 
-function Card({color, saturation}: StampProps) {
-    const style = {"--inkColor": color, "opacity": saturation / 100 } as React.CSSProperties;
+function Card({style, title = 'ChitChat', message = 'You have a new message!'}: CardProps) {
     return (
-        <div className="stamp card-container" style={style}>
+        <div className="card-container" style={style}>
             <div className="card-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                 </svg>
             </div>
             <div className="card-content">
-                <div className="card-title">ChitChat</div>
-                <p className="card-message">You have a new message!</p>
+                <div className="card-title">{title}</div>
+                <p className="card-message">{message}</p>
             </div>
         </div>
     );
@@ -83,7 +81,11 @@ const mockSearchResults = [
     { id: 5, title: "React vs Vue", category: "Comparison" }
 ];
 
-function Search({color, saturation}: StampProps) {
+interface SearchProps {
+    style?: React.CSSProperties
+}
+
+function Search({style}: SearchProps) {
     const [searchQuery, setSearchQuery] = useState("");
     const [showResults, setShowResults] = useState(false);
     const [isActive, setIsActive] = useState(false);
@@ -118,11 +120,9 @@ function Search({color, saturation}: StampProps) {
             setFocusedIndex(nextIndex);
         }
     };
-
-    const style = {"--inkColor": color, "opacity": saturation / 100 } as React.CSSProperties;
     
     return (
-        <div className="stamp search-container" style={style} ref={searchContainerRef}>
+        <div className="search-container" style={style} ref={searchContainerRef}>
             <div className="search-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="10" r="7"/>
@@ -170,9 +170,9 @@ function Search({color, saturation}: StampProps) {
 }
 
 interface ColorPickerProps {
-    colors: string[];
-    selectedColor: string;
-    onColorSelect: (color: string) => void;
+    colors: string[],
+    selectedColor: string,
+    onColorSelect: (color: string) => void
 }
 
 function ColorPicker({colors, selectedColor, onColorSelect}: ColorPickerProps) {
@@ -192,8 +192,8 @@ function ColorPicker({colors, selectedColor, onColorSelect}: ColorPickerProps) {
 }
 
 interface ThemeToggleProps {
-    theme: 'light' | 'dark';
-    onToggle: () => void;
+    theme: 'light' | 'dark',
+    onToggle: () => void
 }
 
 function ThemeToggle({ theme, onToggle }: ThemeToggleProps) {
@@ -221,22 +221,14 @@ function ThemeToggle({ theme, onToggle }: ThemeToggleProps) {
 }
 
 interface ButtonProps {
-    onClick?: () => void;
-    children: React.ReactNode;
-    variant?: 'primary' | 'danger' | 'icon';
-    className?: string;
-    color?: string;
-    saturation?: number;
+    onClick?: () => void,
+    children?: React.ReactNode,
+    variant?: 'danger' | 'icon',
+    className?: string,
+    style?: React.CSSProperties
 }
 
-function Button({ onClick, children, variant = 'primary', className = '', color, saturation }: ButtonProps) {
-    const style = color ? { 
-        "--inkColor": color, 
-        "opacity": saturation ? saturation / 100 : 1,
-        "color": color,
-        "borderColor": color
-    } as React.CSSProperties : undefined;
-    
+function Button({ onClick, children, variant, className = '', style }: ButtonProps) {
     return (
         <button 
             onClick={onClick} 
@@ -248,36 +240,51 @@ function Button({ onClick, children, variant = 'primary', className = '', color,
     );
 }
 
-function StampableButton({ color, saturation }: StampProps) {
+interface PopupProps {
+    message: string,
+    onClose?: () => void,
+    style?: React.CSSProperties
+}
+
+function PopupContent({ message, onClose, style} : PopupProps) {
     return (
-        <Button color={color} saturation={saturation} className="stamp">
-            Click Me
-        </Button>
+        <div className="popup-preview" style={style}>
+            <div className="popup-preview-header">
+                <h3>Message</h3>
+                <Button onClick={onClose} variant="icon" className="popup-close">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </Button>
+            </div>
+            <div className="popup-preview-message">{message}</div>
+        </div>
     );
 }
 
-function DeleteButton({ onClick }: { onClick: () => void }) {
+function Popup({ message, onClose, style }: PopupProps) {
     return (
-        <Button onClick={onClick} variant="icon" className="delete-button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-        </Button>
+        <div className="popup-overlay" onClick={onClose}>
+            <div className="popup-content" style={style} onClick={e => e.stopPropagation()}>
+                <PopupContent message={message} onClose={onClose} style={style} />
+            </div>
+        </div>
     );
 }
 
-function ProgressBar({ color, saturation, progress = 50, orientation = 'horizontal' }: StampProps & { progress?: number, orientation?: 'vertical' | 'horizontal' }) {
-    const style = { 
-        "--inkColor": color, 
-        "opacity": saturation / 100 
-    } as React.CSSProperties;
-    
+interface ProgressBarProps {
+    progress?: number,
+    orientation?: 'vertical' | 'horizontal',
+    style?: React.CSSProperties
+}
+
+function ProgressBar({ style, progress = 50, orientation = 'horizontal' }: ProgressBarProps) {    
     const clampedProgress = Math.min(Math.max(progress, 0), 100);
     
     return (
-        <div className={`stamp progress-container ${orientation}`} style={style}>
-            <div className="progress-bar">
+        // <div className={`progress-container ${orientation}`} style={style}>
+            <div className={`progress-bar ${orientation}`} style={style}>
                 <div 
                     className="progress-fill" 
                     style={{ 
@@ -285,8 +292,8 @@ function ProgressBar({ color, saturation, progress = 50, orientation = 'horizont
                     }}
                 ></div>
             </div>
-        </div>
+        // </div>
     );
 }
 
-export { Card, Dropdown, DropdownItem, Search, Logo, ColorPicker, ThemeToggle, Button, DeleteButton, StampableButton, ProgressBar }
+export { Card, Dropdown, DropdownItem, Search, Logo, ColorPicker, ThemeToggle, Button, ProgressBar, Popup, PopupContent }

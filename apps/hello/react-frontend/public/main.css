@@ -1,6 +1,5 @@
 :root {
     --inkColor: #000;
-    --sidebarWidth: 280px;
     --bgColor: #fff;
     --textColor: #000;
     --borderColor: #eee;
@@ -29,25 +28,28 @@ ul {
     padding: 0;
 }
 
-#topRow {
+select {
+    width: 108px;
+}
+
+#shroud {
+    display: none;
     position: fixed;
     top: 0;
-    left: 0;
-    bottom: 0;
-    width: var(--sidebarWidth);
-    background: var(--bgColor);
-    z-index: 9000;
-    padding: 16px;
-    border-right: 1px solid var(--borderColor);
-    overflow-y: auto;
-    box-sizing: border-box;
+    height: 200px;
+    background: linear-gradient(180deg, var(--bgColor), transparent);
+    width: 100%;
+    z-index: 200;
+    pointer-events: none;
 }
 
 #stampList {
-    margin-left: var(--sidebarWidth);
+    margin-left: 190px;
+    margin-top: 0;
     padding: 16px;
     min-height: 100vh;
     box-sizing: border-box;
+    overflow: scroll;
 }
 
 #stampList li {
@@ -56,33 +58,25 @@ ul {
 }
 
 @media (max-width: 768px) {
-    #topRow {
-        position: relative;
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid #eee;
-        padding: 12px;
-    }
-
     #stampList {
         margin-left: 0;
+        margin-top: 150px;
         padding: 12px;
     }
-}
-
-.stamp {
-    color: var(--inkColor);
+    #shroud {
+        display: block;
+    }
 }
 
 .search-container {
     display: flex;
     align-items: flex-start;
-    background: color-mix(in srgb, var(--textColor) 5%, transparent);
     border-radius: 16px;
     padding: 7px 13px;
     width: 240px;
     outline: 1px solid currentColor;
     position: relative;
+    color: var(--inkColor);
 }
 
 .search-input-wrapper {
@@ -94,7 +88,6 @@ ul {
 
 .search-results {
     position: relative;
-    background: white;
     margin-top: 4px;
     max-height: 200px;
     overflow-y: auto;
@@ -102,9 +95,9 @@ ul {
 }
 
 .search-result-item {
-    padding: 8px 12px;
+    padding: 8px 0px;
     cursor: pointer;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--inkColor);
 }
 
 .search-result-item:last-child {
@@ -203,17 +196,19 @@ ul {
     justify-content: center;
     padding: 0px 16px;
     width: 240px;
+    color: var(--inkColor);
 }
 
 .color-picker {
     display: flex;
-    gap: 8px;
-    padding: 8px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
 .color-circle {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     border: 2px solid transparent;
     cursor: pointer;
@@ -230,10 +225,26 @@ ul {
     transform: scale(1.1);
 }
 
-.theme-toggle {
+.hud {
     position: fixed;
-    top: 16px;
+    top: 10px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.hud.right {
     right: 16px;
+}
+
+.hud.left {
+    left: 16px;
+    align-items: flex-start;
+}
+
+.theme-toggle {
     background: none;
     border: none;
     padding: 8px;
@@ -258,26 +269,25 @@ ul {
 .button-group {
     display: flex;
     gap: 8px;
-    margin-bottom: 16px;
+    align-items: center;
+    padding: 6px;
 }
 
 .button {
     padding: 8px 16px;
-    border: 1px solid var(--borderColor);
+    border: 1px solid var(--inkColor);
     border-radius: 8px;
     background: var(--bgColor);
-    color: var(--textColor);
+    color: var(--inkColor);
     cursor: pointer;
     transition: all 0.2s ease;
     font-size: 14px;
+    transform: scale(1);
 }
 
 .button:hover {
-    background: var(--hoverBgColor);
-}
-
-.button.primary {
-    border-color: var(--textColor);
+    background: var(--inkColor);
+    color: var(--bgColor);
 }
 
 .button.danger {
@@ -298,16 +308,11 @@ ul {
     justify-content: center;
     border: none;
     background: transparent;
+    color: var(--textColor);
 }
 
 .button.icon:hover {
     background: var(--hoverBgColor);
-}
-
-.button-group {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
 }
 
 .stamp-item {
@@ -320,30 +325,12 @@ ul {
     position: relative;
 }
 
-.delete-button {
-    position: absolute;
-    right: 15px;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
-.stamp-item:hover .delete-button {
-    opacity: 1;
-}
-
-.progress-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-}
-
-.progress-container.vertical .progress-bar {
+.progress-bar.vertical {
     width: 24px;
     height: 80px;
 }
 
-.progress-container.horizontal .progress-bar {
+.progress-bar.horizontal {
     width: 120px;
     height: 24px;
 }
@@ -371,12 +358,114 @@ ul {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 8px;
-    background: var(--bgSecondary);
-    border-radius: 8px;
 }
 
 .saturation-label {
     font-size: 14px;
     color: var(--textSecondary);
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+}
+
+.popup-content {
+    background: var(--bgColor);
+    border: 1px solid var(--borderColor);
+    border-radius: 12px;
+    padding: 20px;
+    min-width: 300px;
+    max-width: 90%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.3s ease;
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--borderColor);
+}
+
+.popup-header h3 {
+    margin: 0;
+    color: var(--textColor);
+    font-size: 18px;
+}
+
+.popup-message {
+    color: var(--textColor);
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.popup-close {
+    padding: 4px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.popup-preview {
+    background: color-mix(in srgb, var(--inkColor) 88%, transparent);
+    border: 1px solid var(--inkColor);
+    border-radius: 12px;
+    padding: 16px;
+    min-width: 200px;
+    max-width: 300px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: white;
+}
+
+.popup-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.popup-preview-header h3 {
+    margin: 0;
+    color: white;
+    font-size: 16px;
+}
+
+.popup-preview-close {
+    padding: 4px;
+    cursor: pointer;
+    color: white;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.popup-preview-close:hover {
+    opacity: 1;
+}
+
+.popup-preview-message {
+    color: white;
+    font-size: 14px;
+    line-height: 1.4;
+    opacity: 0.9;
 }
