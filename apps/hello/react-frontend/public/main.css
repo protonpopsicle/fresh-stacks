@@ -360,11 +360,6 @@ select {
     gap: 12px;
 }
 
-.saturation-label {
-    font-size: 14px;
-    color: var(--textSecondary);
-}
-
 .popup-overlay {
     position: fixed;
     top: 0;
@@ -411,8 +406,12 @@ select {
     line-height: 1.5;
 }
 
-.popup-close {
-    padding: 4px;
+button.icon.popup-close {
+    color: white;
+}
+
+button.icon.popup-close:hover {
+    color: var(--textColor);
 }
 
 @keyframes fadeIn {
