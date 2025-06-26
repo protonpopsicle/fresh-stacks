@@ -20,9 +20,14 @@ app.use(express.static(staticDir));
 app.get('/', (req, res) => {
   res.sendFile(path.join(staticDir, 'index.html'));
 });
+
+app.get('/stamps', (req, res) => {
+  res.sendFile(path.join(staticDir, 'stamps.html'));
+});
     
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
 
-run().catch(console.dir);
+// DB not used
+// run().catch(console.dir);

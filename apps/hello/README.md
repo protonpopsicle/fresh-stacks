@@ -30,7 +30,6 @@ Populate the values in the .env file so code can access necessary environment va
 
 serving files from:  /path/to/fresh-stacks/apps/hello/build
 Server listening on port 3000
-Pinged your deployment. You successfully connected to MongoDB!
 ```
 
 Visit [http://localhost:3000](http://localhost:3000).

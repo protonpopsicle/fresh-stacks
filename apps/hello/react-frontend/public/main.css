@@ -29,7 +29,7 @@ ul {
 }
 
 select {
-    width: 108px;
+    width: 115px;
 }
 
 #shroud {
@@ -47,7 +47,6 @@ select {
     margin-left: 190px;
     margin-top: 0;
     padding: 16px;
-    min-height: 100vh;
     box-sizing: border-box;
     overflow: scroll;
 }
