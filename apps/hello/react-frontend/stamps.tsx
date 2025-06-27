@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, Logo, Dropdown, DropdownItem, Search, ColorPicker, ThemeToggle, Button, ProgressBar, PopupContent } from './components';
 
 const displayNames: Record<string, string> = {
@@ -71,6 +71,7 @@ const stampOptions = [
 
 export default function Interface() {
     const [stamps, setStamps] = useState<StampState[]>([]);
+    const stampsEndRef = useRef<HTMLDivElement>(null);
     const [history, setHistory] = useState<StampState[][]>([[]]);
     const [componentName, setComponentName] = useState(componentOptions[0]['value']);
     const [inkColor, setInkColor] = useState(colorList[0]);
@@ -84,6 +85,11 @@ export default function Interface() {
         // Check system preference
         return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     });
+
+    const scrollToBottom = () => {
+        stampsEndRef.current?.scrollIntoView({ behavior: "instant" });
+    };
+    useEffect(scrollToBottom, [stamps]);
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme);
@@ -227,6 +233,7 @@ export default function Interface() {
                         {renderStamp(index, stampState)}
                     </li>
                 )}
+                <div ref={stampsEndRef} />
             </ul>
         </div>
     );
