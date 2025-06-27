@@ -1,5 +1,5 @@
 # hello
-Node static files server + simple React app. Serves landing page for [fresh-stacks.org](https://fresh-stacks.org/).
+Node static files server + simple React app. Serves landing page for [fresh-stacks.org](https://fresh-stacks.org/) and "UI Stamps" application.
 
 ## Install Dependencies
 
