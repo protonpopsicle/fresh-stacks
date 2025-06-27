@@ -22,23 +22,26 @@ https://fresh-stacks.org
 fresh-stacks.org.	60	IN	A	34.120.229.110
 ```
 
-The domain is registered with Cloudflare (DNS only--no proxy). The address `34.120.229.110` is a reserved (static) external IPv4 address in GCP. The SSL certificate is Google-managed. TLS termination is handled by an HTTP(S) Load Balancer created by Google based on our Kubernetes [ingress manifest](kubernetes/basic-ingress.yaml).
+The domain is registered with Cloudflare (DNS only--no proxy). The address `34.120.229.110` is a reserved (static) external IPv4 address in GCP. The SSL certificate is Google-managed.
 
 ```console
-$ kubectl config use-context gke_fresh-stacks_us-central1_fresh-cluster-1
-% kubectl get ingress basic-ingress
-NAME            CLASS    HOSTS   ADDRESS         PORTS   AGE
-basic-ingress   <none>   *       334.120.229.110 80      2d21h
+% gcloud compute ssl-certificates describe mcrt-13d5023e-571a-46c9-a6e5-d093386e0ef6
+certificate: |
+  -----BEGIN CERTIFICATE-----
+  ...
 ```
 
-GCP docs describing this setup:
-- https://cloud.google.com/kubernetes-engine/docs/tutorials/http-balancer
-- https://cloud.google.com/kubernetes-engine/docs/how-to/managed-certs
+### Google Cloud
+
+Resources are configured using Google Cloud Console or CLI (🤦 ideally we'd migrate our project to use Terraform). TLS termination is handled by an External Application Load Balancer. Behind which are `n` "backends". The idea is these map to the [/apps](apps) in this repo. Currently there is only one: a Compute Engine VM instance in zone: us-central1-a. A custom firewall rule allows ingress from the load balancer to the VM.
+
+> [!NOTE]
+> Initially, k8s was used to deploy to a shared GKE (Google Kubernetes Engine) cluster but the base cost was very high ($75+/mo) even with no services running. k8s configs are still included for reference and can be used for Minikube local deployment.
 
 ### Costs
 
 The domain name costs $10.11/year.
-Google Kubernetes Engine (GKE) has a high maintanence cost ($75+/mo). Currently we are on GCP free trial which expires June 18, 2025.
+GCP cost is minimal today. Waiting for post-free-trial monthly bill.
 
 ## Development Environments
 
@@ -47,7 +50,7 @@ Each application under [/apps](apps) has a README with environment setup instruc
 2. Run using Docker
 3. Deploy to local k8s
 
-For cloud hosting we operate a shared GKE cluster `fresh-cluster-1`.
+For cloud hosting we operate a shared GCP project `fresh-stacks` in which VM instances can be created and endpoints exposed via load balancer.
 
 ### Docker Desktop
 
@@ -62,22 +65,8 @@ For cloud hosting we operate a shared GKE cluster `fresh-cluster-1`.
 Install the [GCloud CLI](https://cloud.google.com/sdk/docs/install). Contact @protonpopsicle to request access for the `fresh-stacks` GCP project.
 
 ```
-% gcloud components install gke-gcloud-auth-plugin
-% gcloud container clusters get-credentials fresh-cluster-1 --region=us-central1
 % gcloud auth configure-docker us-central1-docker.pkg.dev
 ```
-
-To switch kubectl contexts between Minikube and fresh-cluster-1:
-```console
-% kubectl config get-contexts                                            
-CURRENT   NAME                                           CLUSTER                                        AUTHINFO                                       NAMESPACE
-          gke_fresh-stacks_us-central1_fresh-cluster-1   gke_fresh-stacks_us-central1_fresh-cluster-1   gke_fresh-stacks_us-central1_fresh-cluster-1             
-*         minikube                                       minikube                                       minikube                                       default
-% kubectl config use-context NAME
-```
-
-Relevent docs: 
-https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl
 
 For example of detailed steps see [apps/hello/README.md](apps/hello/README.md).
 

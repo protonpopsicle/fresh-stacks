@@ -1,5 +1,5 @@
 # hello
-Node static files server + simple React app. Serves landing page for [fresh-stacks.org](https://fresh-stacks.org/).
+Node static files server + simple React app. Serves landing page for [fresh-stacks.org](https://fresh-stacks.org/) and "UI Stamps" application.
 
 ## Install Dependencies
 
@@ -42,7 +42,31 @@ Visit [http://localhost:3000](http://localhost:3000).
 
 Visit [http://localhost:3000](http://localhost:3000).
 
-## Deploy to local k8s
+## Google Compute Engine VM
+```
+% docker build --platform linux/amd64 -t us-central1-docker.pkg.dev/fresh-stacks/fresh-repo/hello:latest .
+% docker push us-central1-docker.pkg.dev/fresh-stacks/fresh-repo/hello:latest
+% gcloud compute instances create-with-container hello-instance \
+--container-image us-central1-docker.pkg.dev/fresh-stacks/fresh-repo/hello:latest \
+--zone us-central1-a \
+--container-env-file .env \
+--machine-type e2-micro
+```
+
+## Update rather than create VM
+```
+% gcloud compute instances update-container hello-instance \
+--container-image us-central1-docker.pkg.dev/fresh-stacks/fresh-repo/hello:latest \
+--zone us-central1-a
+```
+
+Reference: https://cloud.google.com/compute/docs/containers/configuring-options-to-run-containers
+
+Visit [https://fresh-stacks.org](https://fresh-stacks.org)
+
+## k8s
+
+### Deploy to local k8s
 ```console
 % minikube start
 % eval $(minikube -p minikube docker-env)
@@ -57,7 +81,11 @@ http://127.0.0.1:62900
 
 Visit `http://127.0.0.1:62900` (actual URL obtained from above command). Note: [yq](https://github.com/mikefarah/yq) is used above to substitute the `image` value in the deployment manifest to point to your local image.
 
-## Deploy on GKE
+### Deploy on GKE
+
+> [!WARNING]  
+> Currently there is no GKE cluster to deploy to due to the high base maintenance fee. The following is reference only.
+
 ```console
 % docker build --platform linux/amd64 -t us-central1-docker.pkg.dev/fresh-stacks/fresh-repo/hello:latest .
 % docker push us-central1-docker.pkg.dev/fresh-stacks/fresh-repo/hello:latest
@@ -67,5 +95,3 @@ Visit `http://127.0.0.1:62900` (actual URL obtained from above command). Note: [
 % kubectl apply -f hello-deployment.yaml -f hello-service.yaml
 % kubectl rollout restart deployment/hello
 ```
-
-Visit [https://fresh-stacks.org](https://fresh-stacks.org)
