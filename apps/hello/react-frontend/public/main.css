@@ -48,7 +48,7 @@ select {
     margin-top: 0;
     padding: 16px;
     box-sizing: border-box;
-    overflow: scroll;
+    overflow: auto;
 }
 
 #stampList li {
@@ -69,7 +69,7 @@ select {
 
 .search-container {
     display: flex;
-    align-items: flex-start;
+    flex-direction: column;
     border-radius: 16px;
     padding: 7px 13px;
     width: 240px;
@@ -79,10 +79,8 @@ select {
 }
 
 .search-input-wrapper {
-    position: relative;
-    width: 100%;
     display: flex;
-    flex-direction: column;
+    column-gap: 5px;
 }
 
 .search-results {
@@ -103,7 +101,6 @@ select {
     border-bottom: none;
 }
 
-.search-result-item:hover,
 .search-result-item.focused {
     background: var(--hoverBgColor);
 }
@@ -215,10 +212,6 @@ select {
     transition: transform 0.2s ease;
 }
 
-.color-circle:hover {
-    transform: scale(1.1);
-}
-
 .color-circle.selected {
     border-color: #666;
     transform: scale(1.1);
@@ -256,10 +249,6 @@ select {
     transition: background-color 0.2s;
 }
 
-.theme-toggle:hover {
-    background: var(--hoverBgColor);
-}
-
 .theme-toggle svg {
     width: 24px;
     height: 24px;
@@ -282,11 +271,7 @@ select {
     transition: all 0.2s ease;
     font-size: 14px;
     transform: scale(1);
-}
-
-.button:hover {
-    background: var(--inkColor);
-    color: var(--bgColor);
+    user-select: none;
 }
 
 .button.danger {
@@ -294,9 +279,66 @@ select {
     border-color: #dc2626;
 }
 
-.button.danger:hover {
-    background: #dc2626;
-    color: white;
+/* hover styles for desktop browsers */
+
+@media (hover: hover) {
+    .theme-toggle:hover {
+        background: var(--hoverBgColor);
+    }
+    .color-circle:hover {
+        transform: scale(1.1);
+    }
+    button.icon.popup-close:hover {
+        color: var(--textColor);
+    }
+    .search-result-item:hover {
+        background: var(--hoverBgColor);
+    }
+    .button:hover {
+        background: var(--inkColor);
+        color: var(--bgColor);
+    }
+    .button.danger:hover {
+        background: #dc2626;
+        color: white;
+    }
+    .button.icon:hover {
+        background: var(--hoverBgColor);
+    }
+    .popup-preview-close:hover {
+        opacity: 1;
+    }
+}
+
+/* tap styles for mobile browsers */
+
+@media (hover: none) {
+    .theme-toggle:active {
+        background: var(--hoverBgColor);
+    }
+    .color-circle:active {
+        transform: scale(1.1);
+    }
+    button.icon.popup-close:active {
+        color: var(--textColor);
+    }
+    .search-result-item:active {
+        background: var(--hoverBgColor);
+    }
+    .button:active {
+        background: var(--inkColor);
+        color: var(--bgColor);
+    }
+    .button.danger:active {
+        background: #dc2626;
+        color: white;
+    }
+    .button.icon:active {
+        background: var(--hoverBgColor);
+    }
+    .popup-preview-close:active {
+        opacity: 1;
+    }
 }
 
 .button.icon {
@@ -308,10 +350,6 @@ select {
     border: none;
     background: transparent;
     color: var(--textColor);
-}
-
-.button.icon:hover {
-    background: var(--hoverBgColor);
 }
 
 .stamp-item {
@@ -409,10 +447,6 @@ button.icon.popup-close {
     color: white;
 }
 
-button.icon.popup-close:hover {
-    color: var(--textColor);
-}
-
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -455,10 +489,6 @@ button.icon.popup-close:hover {
     color: white;
     opacity: 0.7;
     transition: opacity 0.2s ease;
-}
-
-.popup-preview-close:hover {
-    opacity: 1;
 }
 
 .popup-preview-message {

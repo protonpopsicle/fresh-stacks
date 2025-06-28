@@ -31,17 +31,10 @@ certificate: |
   ...
 ```
 
-### Google Cloud
-
-Resources are configured using Google Cloud Console or CLI (🤦 ideally we'd migrate our project to use Terraform). TLS termination is handled by an External Application Load Balancer. Behind which are `n` "backends". The idea is these map to the [/apps](apps) in this repo. Currently there is only one: a Compute Engine VM instance in zone: us-central1-a. A custom firewall rule allows ingress from the load balancer to the VM.
-
-> [!NOTE]
-> Initially, k8s was used to deploy to a shared GKE (Google Kubernetes Engine) cluster but the base cost was very high ($75+/mo) even with no services running. k8s configs are still included for reference and can be used for Minikube local deployment.
-
 ### Costs
 
 The domain name costs $10.11/year.
-GCP cost is minimal today. Waiting for post-free-trial monthly bill.
+GCP cost/mo: TBD.
 
 ## Development Environments
 
@@ -49,8 +42,6 @@ Each application under [/apps](apps) has a README with environment setup instruc
 1. Run natively
 2. Run using Docker
 3. Deploy to local k8s
-
-For cloud hosting we operate a shared GCP project `fresh-stacks` in which VM instances can be created and endpoints exposed via load balancer.
 
 ### Docker Desktop
 
@@ -61,6 +52,13 @@ For cloud hosting we operate a shared GCP project `fresh-stacks` in which VM ins
 [Minikube](https://minikube.sigs.k8s.io/) is a single-node k8s cluster useful for local developement.
 
 ### Google Cloud
+
+For cloud hosting we operate a shared GCP project `fresh-stacks` in which VM instances can be created and endpoints exposed via load balancer.
+
+Resources are configured using Google Cloud Console or CLI (🤦 ideally the project would use Terraform). TLS termination is handled by an External Application Load Balancer. Behind which are `n` "backends". Currently there is only one: a Compute Engine VM instance in zone: us-central1-a. A custom firewall rule allows ingress from the load balancer to the VM.
+
+> [!NOTE]
+> GKE (Google Kubernetes Engine) configs are included for reference and can be used for Minikube local deployment. However, no GKE cluster has been created in our GCP project due to high base fee.
 
 Install the [GCloud CLI](https://cloud.google.com/sdk/docs/install). Contact @protonpopsicle to request access for the `fresh-stacks` GCP project.
 

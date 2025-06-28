@@ -1,5 +1,5 @@
 # hello
-Node static files server + simple React app. Serves landing page for [fresh-stacks.org](https://fresh-stacks.org/) and "UI Stamps" application.
+Node static files server + simple React app. Serves landing page for [fresh-stacks.org](https://fresh-stacks.org/) and "InkPad" application.
 
 ## Install Dependencies
 
@@ -84,7 +84,7 @@ Visit `http://127.0.0.1:62900` (actual URL obtained from above command). Note: [
 ### Deploy on GKE
 
 > [!WARNING]  
-> Currently there is no GKE cluster to deploy to due to the high base maintenance fee. The following is reference only.
+> The GKE cluster does not exist. The following is reference only.
 
 ```console
 % docker build --platform linux/amd64 -t us-central1-docker.pkg.dev/fresh-stacks/fresh-repo/hello:latest .

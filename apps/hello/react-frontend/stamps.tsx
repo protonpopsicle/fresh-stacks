@@ -87,7 +87,7 @@ export default function Interface() {
     });
 
     const scrollToBottom = () => {
-        stampsEndRef.current?.scrollIntoView({ behavior: "instant" });
+        stampsEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
     useEffect(scrollToBottom, [stamps]);
 
@@ -184,7 +184,7 @@ export default function Interface() {
     const handleClearAll = () => {
         setStamps([]);
         setInkSaturation(100);
-        setHistory([]);
+        setHistory([[]]);
     };
 
     const inkSaturationBarStyle = { '--inkColor': inkColor, 'opacity': 100 };
