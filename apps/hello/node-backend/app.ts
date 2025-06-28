@@ -21,8 +21,8 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(staticDir, 'index.html'));
 });
 
-app.get('/stamps', (req, res) => {
-  res.sendFile(path.join(staticDir, 'stamps.html'));
+app.get('/inkpad', (req, res) => {
+  res.sendFile(path.join(staticDir, 'inkpad.html'));
 });
     
 app.listen(port, () => {
