@@ -61,12 +61,6 @@ Then in the SSH session on the VM:
 cd ~/nginx
 ```
 
-Make the script executable:
-
-```bash
-chmod +x run-nginx-certbot.sh
-```
-
 ---
 
 ## Step 4: Point DNS at the VM (so certbot can validate)
@@ -94,7 +88,7 @@ Back in the SSH session on the VM, from `infrastructure/nginx` (or `~/nginx`):
 
 ```bash
 export CERTBOT_EMAIL=your@email.com
-./run-nginx-certbot.sh
+bash ./run-nginx-certbot.sh
 ```
 
 Use a real email address (Let’s Encrypt uses it for expiry and security notices).
@@ -118,15 +112,3 @@ From your browser or command line:
 - **http://fresh-stacks.org** — should redirect to https.
 
 If anything fails, check `docker logs nginx-certbot` and that the hello container is still running (`docker ps`).
-
----
-
-## Step 7 (later): GCP cleanup
-
-After you’re satisfied that the site works with DNS pointing at the VM:
-
-1. Remove **Cloud Armor** from the Load Balancer (or delete the backend that uses it).
-2. Delete the **External Application Load Balancer** (forwarding rule, target proxy, backend service, URL map).
-3. **Release the reserved static IP** `34.120.229.110` so you stop paying for it.
-
-Then the only remaining cost for this setup is the VM (~$2.66/mo) and the domain. See [docs/vm-direct-tls-migration.md](../../docs/vm-direct-tls-migration.md) for details.
