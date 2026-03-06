@@ -1,42 +1,84 @@
-# Nginx reverse proxy with jonasal/nginx-certbot
+# Nginx Reverse Proxy with TLS (certbot)
 
-Docker-based nginx and certbot container with **automatic certificate renewal** (every 12 days). No cron, no second container, no Docker socket.
+This directory contains the configuration to deploy a Docker-based Nginx server with automatic certificate renewal (every 12 days) using [`jonasal/docker-nginx-certbot`](https://github.com/JonasAlfredsson/docker-nginx-certbot).
 
-See [jonasal/docker-nginx-certbot](https://github.com/JonasAlfredsson/docker-nginx-certbot).
+## Infrastructure Details
+
+| Property | Value |
+|----------|-------|
+| VM Name | `hello-instance` (Zone: `us-central1-a`) |
+| Static IP | `34.69.28.198` |
+| Domain | `fresh-stacks.org` |
 
 ## Files
 
 | File | Purpose |
-|------|--------|
+|------|---------|
 | `user_conf.d/fresh-stacks.conf` | Nginx config: HTTP→HTTPS, ACME challenge, proxy to `host.docker.internal:3000` |
-| `run-nginx-certbot.sh` | Starts the container with the right volumes and env |
+| `run-nginx-certbot.sh` | Wrapper script to start the container with correct volumes/env |
 
-## One-time setup on the VM
+## Deployment Steps
 
-1. Ensure **ports 80 and 443** are open in GCP firewall. **DNS** for `fresh-stacks.org` (and `www`) must point at this VM's IP so Let's Encrypt can issue the cert on first run.
-2. Get this repo onto the VM (clone or copy the `infrastructure/nginx/` directory).
-3. Ensure the **app** is running on the host on port 3000 (e.g. your existing container with `-p 3000:3000`).
-4. From `infrastructure/nginx/` run:
-   ```bash
-   export CERTBOT_EMAIL=you@example.com
-   ./run-nginx-certbot.sh
-   ```
-   The first start can take a few minutes (Diffie-Hellman parameters). After that, the site is served over HTTPS and **certificate renewal is automatic** (every 12 days); no further action needed.
+### 1. Prepare DNS & Firewall
 
-## Optional env vars
+Ensure ports `80` and `443` are open in the GCP firewall. In your DNS provider (e.g., Cloudflare), point the A records for `fresh-stacks.org` and `www` to `34.69.28.198`. Verify with:
 
-- `LETSENCRYPT_DIR` — where to store certs (default: `./letsencrypt`).
-- `CONTAINER_NAME` — container name (default: `nginx-certbot`).
-- `IMAGE` — image to use (default: `jonasal/nginx-certbot:6`).
+```bash
+dig +short fresh-stacks.org
+```
 
-## Reload config without restart
+### 2. SSH to the VM
 
-If you change `user_conf.d/fresh-stacks.conf`, reload nginx inside the container:
+```bash
+gcloud compute ssh hello-instance --zone=us-central1-a
+```
+
+### 3. Ensure App is Running
+
+The proxy expects the app on port `3000`. Verify with `docker ps`. If not running, start your app container with `-p 3000:3000`.
+
+### 4. Sync Files to VM
+
+If the repo isn't already there, copy the nginx directory from your local machine:
+
+```bash
+gcloud compute scp --recurse infrastructure/nginx hello-instance:~/nginx --zone=us-central1-a
+```
+
+### 5. Launch Nginx & Certbot
+
+On the VM, navigate to the directory and run:
+
+```bash
+export CERTBOT_EMAIL=your@email.com
+bash ./run-nginx-certbot.sh
+```
+
+> **Note:** First-time setup takes a few minutes to generate DH parameters. Monitor progress with `docker logs -f nginx-certbot`.
+
+---
+
+## Maintenance & Scaling
+
+### Reload Configuration
+
+If you modify `user_conf.d/fresh-stacks.conf`, reload Nginx without a restart:
 
 ```bash
 docker kill --signal=HUP nginx-certbot
 ```
 
-## Adding more apps later
+### Adding New Apps
 
-Edit `user_conf.d/fresh-stacks.conf`: add a `location` or `server` block proxying to `http://host.docker.internal:3001` (or the app's port). Then send SIGHUP to the container (or restart it).
+1. Edit `user_conf.d/fresh-stacks.conf` to add a new `location` or `server` block.
+2. Proxy to the new port (e.g., `http://host.docker.internal:3001`).
+3. Send the `SIGHUP` signal as shown above.
+
+---
+
+## Environment Variables (Optional)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `LETSENCRYPT_DIR` | `./letsencrypt` | Cert storage path |
+| `CONTAINER_NAME` | `nginx-certbot` | Container name |

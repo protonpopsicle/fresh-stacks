@@ -5,7 +5,6 @@
 The app runs in a **Docker container on a GCP VM** with an **nginx reverse proxy** that handles TLS with automatic cert renewal.
 
 - **Reverse proxy & TLS:** [nginx/](nginx/)
-- **VM & networking setup:** See [nginx/RUNBOOK.md](nginx/RUNBOOK.md)
 - **Kubernetes (reference):** [kubernetes/](kubernetes/) — Local testing only; not used in production
 
 ---
